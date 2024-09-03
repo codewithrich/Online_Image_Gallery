@@ -1,9 +1,10 @@
 import "./App.css";
 import SendIcon from "@mui/icons-material/Send";
-import { Box, MenuItem, TextField, Button } from "@mui/material";
+import { Box,  TextField, Button } from "@mui/material";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { styled } from "@mui/material/styles";
 import { useState } from "react";
+import axios from "axios";
 
 const VisuallyHiddenInput = styled("input")({
   clip: "rect(0 0 0 0)",
@@ -17,27 +18,33 @@ const VisuallyHiddenInput = styled("input")({
   width: 1,
 });
 
-const gender = [
-  {
-    value: "male",
-    label: "M",
-  },
-  {
-    value: "female",
-    label: "F",
-  },
-];
 
 function App() {
 
+  const [name,setName]=useState("");
+  const [mail,setMail]=useState("");
   const [image, setImage] = useState("");
 
-  function convertToBase64(e) {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    try {
+    console.log("Entered submission");
+    await axios.post("http://localhost:9000/postimage",{name:name,mail:mail,image:image});
+    alert("submitted successfully")
+    } catch (error) {
+      console.log(error.message);
+    }finally{
+      setName("");  
+      setMail("");
+      setImage("");
+    }
+  }
+
+
+  function convertToBase64(e) {
     var reader = new FileReader();
     reader.readAsDataURL(e.target.files[0]);
     reader.onload = () => {
-      console.log(reader.result); //base64 encoding
       setImage(reader.result);
     };
     reader.onerror = (error) => {
@@ -56,33 +63,23 @@ function App() {
             autoComplete="on"
           >
             <TextField
-              id="standard-basic"
+              id="standard-basic-name"
               label="Name"
               variant="standard"
+              value={name}
+              onChange={(e)=>setName(e.target.value)}
               helperText="Please Enter your Name"
               margin="normal"
             />
             <TextField
-              id="standard-basic"
+              id="standard-basic-email"
               label="Email"
               variant="standard"
               helperText="Please Enter your Email"
+              value={mail}
+              onChange={(e)=>setMail(e.target.value)}
               margin="normal"
             />
-            <TextField
-              id="outlined-select-currency"
-              select
-              label="Select Gender"
-              variant="standard"
-              helperText="Please select your Gender"
-              margin="normal"
-            >
-              {gender.map((option) => (
-                <MenuItem key={option.value} value={option.value}>
-                  {option.label}
-                </MenuItem>
-              ))}
-            </TextField>
 
             <Button
               sx={{ marginLeft: "20px" }}
@@ -105,12 +102,13 @@ function App() {
               sx={{ marginLeft: "20px" }}
               variant="contained"
               endIcon={<SendIcon />}
+              onClick={handleSubmit}
+              type="submit"
             >
               Send
             </Button>
           </Box>
         </div>
-        <image style={{right:"0px"}} width={100} height={100} src={image} alt="image"/>
       </div>
     </>
   );

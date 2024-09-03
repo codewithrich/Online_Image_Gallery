@@ -1,14 +1,19 @@
 import express from "express";
 import connectDB from "./db/mongodb.js";
 import imageModel from "./model/Schema.js";
-
+import cors from 'cors';
+import bodyParser from 'body-parser'
 
 //------------------MIDDLEWARES---------------------------
 const app = express();
 const PORT = 9000;
+app.use(cors());
 connectDB();  //connect to database
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+//due to large image upload limit bodyparser used
+app.use(bodyParser.json({ limit: "10000kb", extended: true }));  
+app.use(bodyParser.urlencoded({ limit: "10000kb", extended: true }));
+// app.use(express.json());
+// app.use(express.urlencoded({ extended: true }));
 
 //--------------------ROUTES--------------------------------
 app.get("/getimage", async(req, res) => {
@@ -23,9 +28,9 @@ app.get("/getimage", async(req, res) => {
 });
 
 app.post('/postimage', async(req, res) => {
-    const {name,mail,gender} = req.body;
+    const {name,mail,image} = req.body;
     try {
-        await imageModel.create({name, mail, gender});
+        await imageModel.create({name, mail, image});
         res.status(200).send("Image created successfully");
         console.log("Task created successfully");
     } catch (error) {
