@@ -6,8 +6,20 @@ const app = express();
 const PORT = 9000;
 
 //--------------------ROUTES--------------------------------
-app.get("/", (req, res) => {
-  res.send("Welcome");
+app.get("/getimage", (req, res) => {
+  try {
+    res.send("Welcome");
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+app.post('/postimage', (req, res) => {
+    try {
+        
+    } catch (error) {
+        console.log(error);
+    }
 });
 
 
