@@ -1,10 +1,10 @@
 import express from "express";
-
+import connectDB from "./db/mongodb.js";
 
 //------------------MIDDLEWARES---------------------------
 const app = express();
 const PORT = 9000;
-
+connectDB();
 //--------------------ROUTES--------------------------------
 app.get("/getimage", (req, res) => {
   try {
