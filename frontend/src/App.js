@@ -3,6 +3,7 @@ import SendIcon from "@mui/icons-material/Send";
 import { Box, MenuItem, TextField, Button } from "@mui/material";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { styled } from "@mui/material/styles";
+import { useState } from "react";
 
 const VisuallyHiddenInput = styled("input")({
   clip: "rect(0 0 0 0)",
@@ -28,6 +29,21 @@ const gender = [
 ];
 
 function App() {
+
+  const [image, setImage] = useState("");
+
+  function convertToBase64(e) {
+    e.preventDefault();
+    var reader = new FileReader();
+    reader.readAsDataURL(e.target.files[0]);
+    reader.onload = () => {
+      console.log(reader.result); //base64 encoding
+      setImage(reader.result);
+    };
+    reader.onerror = (error) => {
+      console.log("Error: " + error);
+    };
+  }
   return (
     <>
       <div className="App">
@@ -79,8 +95,9 @@ function App() {
               Upload files
               <VisuallyHiddenInput
                 type="file"
-                onChange={(event) => console.log(event.target.files)}
+                onChange={convertToBase64}
                 multiple
+                accept="image/*"
               />
             </Button>
 
@@ -93,6 +110,7 @@ function App() {
             </Button>
           </Box>
         </div>
+        <image style={{right:"0px"}} width={100} height={100} src={image} alt="image"/>
       </div>
     </>
   );
