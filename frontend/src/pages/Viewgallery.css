@@ -1,0 +1,11 @@
+.header-div{
+    display: flex;
+    align-items: center;
+    justify-items: center;
+    justify-content: space-evenly;
+    flex-direction: column;
+}
+
+.gallery-images-container{
+    
+}

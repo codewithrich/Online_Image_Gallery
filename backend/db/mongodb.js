@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const mongo_URI = "mongodb+srv://richardson12230:richardson12230@cluster0.34rtbym.mongodb.net/";
+const mongo_URI = "mongodb://127.0.0.1:27017/images";
 
 const connectDB = async () => {
   try {
